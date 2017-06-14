@@ -1,3 +1,10 @@
+#Maps and images
+*.umap
+Content/UI/images/*
+
+#Photos
+*.jpg
+
 #Starter Content
 Content/StarterContent/*
 
