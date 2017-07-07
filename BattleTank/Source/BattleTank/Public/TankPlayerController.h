@@ -2,13 +2,18 @@
 
 #pragma once
 
-#include "Tank.h"
+
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h" // must be the last include
+
+
 
 /**
  * 
  */
+
+class ATank; // Forward declaration
+
 UCLASS()
 class BATTLETANK_API ATankPlayerController : public APlayerController
 {
