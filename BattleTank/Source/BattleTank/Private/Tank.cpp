@@ -5,7 +5,7 @@
 #include "TankBarrel.h"
 #include "Projectile.h"
 #include "Tank.h"
-#include "TankMovementComponent.h"
+
 
 
 
@@ -17,7 +17,7 @@ ATank::ATank()
 
 	// No need to protect pointers as added at construction
 	// TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName ("Aiming Component"));
-	
+	UE_LOG(LogTemp, Warning, TEXT("PISSFLAPS - C++ CONSTRUCTOR CALLED"))
 
 }
 
@@ -25,17 +25,20 @@ ATank::ATank()
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
+	UE_LOG(LogTemp,Warning,TEXT("PISSFLAPS - C++ BEGIN PLAY CALLED"))
 }
 
 void ATank::AimAt(FVector OutHitLocation) {
+	if (!ensure(TankAimingComponent)) { return; }
 	TankAimingComponent->AimAt(OutHitLocation, LaunchSpeed);
 	
 }
 
 void ATank::Fire()
 {
+	if (!ensure(Barrel)) { return; }
 	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
-		if (Barrel && isReloaded) 
+		if (isReloaded) 
 		{ 
 			// Spawn a projectile at the socket location on the barrel
 			auto Projectile = GetWorld()->SpawnActor<AProjectile>(
@@ -49,8 +52,4 @@ void ATank::Fire()
 		}
 }
 
-void ATank::SetMovementComponent(UTankMovementComponent* TankMovementToSet)
-{
-	TankMovementComponent = TankMovementToSet;
-	TankMovementComponent->IntendMoveForward(1);
-}
+
