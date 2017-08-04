@@ -2,7 +2,6 @@
 
 #include "BattleTank.h"
 #include "TankAimingComponent.h"
-#include "Tank.h"
 #include "TankPlayerController.h"
 
 
@@ -12,20 +11,11 @@
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	auto AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
-	if (ensure(AimingComponent)) 
-	{
-		FoundAimingComponent(AimingComponent);
-	}
-	else
-	{
-		UE_LOG(LogTemp,Warning,TEXT("Player Controller cannot find Aiming Component at begin play."))
-	}
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComponent)) { return; }
+	FoundAimingComponent(AimingComponent);
 	
-	
-
-	
-	
+		
 }
 
 void ATankPlayerController::Tick(float DeltaSeconds)
@@ -35,20 +25,14 @@ void ATankPlayerController::Tick(float DeltaSeconds)
 		AimTowardsCrosshair();
 }
 
-ATank* ATankPlayerController::GetControlledTank() const
-{
-	
-		return Cast<ATank>(GetPawn());
-	
-}
-
 void ATankPlayerController::AimTowardsCrosshair() {
-	if (!ensure(GetControlledTank())) { return; }
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComponent)) { return; }
 
 	FVector OutHitLocation; // Out parameter
-	if (GetSightRayHitLocation(OutHitLocation)) { // Has "side-effect", is going to line trace
-	
-		GetControlledTank()->AimAt(OutHitLocation);
+	if (GetSightRayHitLocation(OutHitLocation)) 
+	{ // Has "side-effect", is going to line trace
+		AimingComponent->AimAt(OutHitLocation);
 	}
 }
 
@@ -62,7 +46,8 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) cons
 	auto ScreenLocation = FVector2D((ViewportSizeX * CrosshairXLocation), (ViewportSizeY * CrosshairYLocation));
 	FVector LookDirection;
 	if (GetLookDirection(ScreenLocation,LookDirection)) {
-	   //	UE_LOG(LogTemp,Warning,TEXT("Look Direction: %s"), *LookDirection.ToString())
+	 
+		
 	}
 	// Line-trace along that look direction, and see what we hit (up to max range)
 	GetLookVectorHitLocation(LookDirection, OutHitLocation);

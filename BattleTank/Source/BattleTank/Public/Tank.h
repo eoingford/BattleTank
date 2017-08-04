@@ -16,8 +16,6 @@ class BATTLETANK_API ATank : public APawn
 	GENERATED_BODY()
 
 public:
-	void AimAt(FVector OutHitLocation);
-
 	UFUNCTION(BlueprintCallable, Category = Firing)
 	void Fire();
 
@@ -26,8 +24,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(BlueprintReadOnly)
-	UTankAimingComponent* TankAimingComponent = nullptr;
+	
 	
 
 private:	
